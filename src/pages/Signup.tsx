@@ -1,6 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { useNavigate } from "react-router";
+import { useSignupUserMutation } from "../services/usersApi";
 import "./signup.scss";
 
 const imgUrl =
@@ -21,6 +22,7 @@ export default function Signup() {
 
   const { image, name, email, password, confirm_password } = formData;
   const navigate = useNavigate();
+  const [signupUser, { isLoading, error }] = useSignupUserMutation();
 
   const change = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
@@ -76,8 +78,20 @@ export default function Signup() {
     e.preventDefault();
 
     if (!image) return alert("Please upload your picture");
-    const url = await uploadImage(image);
-    console.log(url);
+    const imageUploadUrl = await uploadImage(image);
+    console.log(imageUploadUrl);
+
+    if (password !== confirm_password) return alert("Passwords not match");
+
+    try {
+      await signupUser({ name, email, password, image: imageUploadUrl }).then(
+        (data: any) => {
+          console.log(data);
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

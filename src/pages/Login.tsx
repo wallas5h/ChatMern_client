@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useNavigate } from "react-router";
+import { useLoginUserMutation } from "../services/usersApi";
 
 export default function Login() {
   const [formData, SetFormData] = useState({
@@ -9,6 +10,7 @@ export default function Login() {
 
   const { email, password } = formData;
   const navigate = useNavigate();
+  const [loginUser, { isLoading, error }] = useLoginUserMutation();
 
   const change = (e: ChangeEvent<HTMLInputElement>) => {
     SetFormData((prev) => ({
@@ -19,6 +21,14 @@ export default function Login() {
 
   const formSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    try {
+      await loginUser(formData).then((data) => {
+        console.log(data);
+        navigate("/chat");
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
