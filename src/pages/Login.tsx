@@ -1,8 +1,14 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import {} from "socket.io-client";
+import { socket } from "../features/appSlice";
+import { RootState } from "../features/store";
+// import { socket } from "../contexts/AppContext";
 import { useLoginUserMutation } from "../services/usersApi";
 
-export default function Login() {
+export const Login = () => {
   const [formData, SetFormData] = useState({
     email: "",
     password: "",
@@ -11,6 +17,11 @@ export default function Login() {
   const { email, password } = formData;
   const navigate = useNavigate();
   const [loginUser, { isLoading, error }] = useLoginUserMutation();
+  const { rooms } = useSelector((state: RootState) => state.app);
+
+  useEffect(() => {
+    // console.log(rooms);
+  }, []);
 
   const change = (e: ChangeEvent<HTMLInputElement>) => {
     SetFormData((prev) => ({
@@ -22,9 +33,19 @@ export default function Login() {
   const formSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await loginUser(formData).then((data) => {
-        console.log(data);
+      await loginUser({
+        email: formData.email,
+        password: formData.password,
+      }).then(({ data }: any) => {
+        if (!data) {
+          toast.error("Login failed, try again");
+          return;
+        }
+        if (data.message) {
+          toast.success(data.message);
+        }
         navigate("/chat");
+        socket.emit("new-user");
       });
     } catch (error) {
       console.log(error);
@@ -90,4 +111,4 @@ export default function Login() {
       </form>
     </div>
   );
-}
+};
