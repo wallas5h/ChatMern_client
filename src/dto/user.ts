@@ -10,7 +10,7 @@ export interface UserRequest {
 }
 
 export interface User {
-  id: string;
+  id: string | null;
   email: string;
   image: string;
   name: string;
