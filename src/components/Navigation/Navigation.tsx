@@ -1,16 +1,23 @@
+import { useEffect } from "react";
 import { Button, NavDropdown } from "react-bootstrap";
-import { useSelector } from "react-redux";
-import { User } from "../../dto/user";
-import { UserState } from "../../features/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../features/store";
+import { clearUserData } from "../../features/userSlice";
 import { useLogoutUserMutation } from "../../services/usersApi";
 
 export const Navigation = () => {
-  const user = useSelector((state: UserState) => state.user) as User;
+  const user = useSelector((state: RootState) => state.user);
   const [logoutUser, { isLoading, error }] = useLogoutUserMutation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // console.log(user);
+  }, []);
 
   const handleLogout = async () => {
     // e.preventDefault();
     try {
+      dispatch(clearUserData());
       await logoutUser(user);
       window.location.replace("/");
     } catch (error) {
@@ -27,15 +34,14 @@ export const Navigation = () => {
         </a>
       </div>
       <div className="links flex justify-around ml-auto">
+        <a className="px-5 hover:bg-cyan-300 py-2" href="/chat">
+          Chat
+        </a>
         {!user.id && (
           <a className="px-5 hover:bg-cyan-300 py-2" href="/login">
             Login
           </a>
         )}
-
-        <a className="px-5 hover:bg-cyan-300 py-2" href="/chat">
-          Chat
-        </a>
         {user.id && (
           <div className="flex flex-row justify-center items-center">
             <NavDropdown
