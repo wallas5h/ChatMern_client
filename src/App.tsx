@@ -1,18 +1,36 @@
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import { Navigation } from "./components";
-import { persistor, store } from "./features/store";
+import { socket } from "./features/appSlice";
+import { RootState } from "./features/store";
 import { Routing } from "./Routing";
 
 const App = () => {
+  const user = useSelector((state: RootState) => state.user);
+  useEffect(() => {
+    if (user.id) {
+      socket.on("connect", () => {});
+    }
+  }, []);
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <Navigation />
-        <Routing />
-      </PersistGate>
-    </Provider>
+    <>
+      <Navigation />
+      <Routing />
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </>
   );
 };
 
