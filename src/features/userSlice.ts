@@ -2,16 +2,28 @@ import { createSlice } from "@reduxjs/toolkit";
 import { User } from "../dto/user";
 import { usersApi } from "../services/usersApi";
 
-export interface UserState {
-  user?: User;
-}
+const initialState: User = {
+  id: null,
+  email: "",
+  image: "",
+  name: "",
+};
 
 export const userSlice = createSlice({
   name: "user",
-  initialState: {} as UserState,
+  initialState,
   reducers: {
-    addNotifications: (state, { payload }) => {},
-    resetNotifications: (state, { payload }) => {},
+    addNotifications: (state, { payload }) => {
+      //   if (state.newMessages[payload]) {
+      //     state.newMessages[payload] = state.newMessages[payload] + 1;
+      // } else {
+      //     state.newMessages[payload] = 1;
+      // }
+    },
+    resetNotifications: (state, { payload }) => {
+      // delete state.newMessages[payload];
+    },
+    clearUserData: () => initialState,
   },
   extraReducers: (builder) => {
     //save user after signup
@@ -29,6 +41,10 @@ export const userSlice = createSlice({
   },
 });
 
-export const { addNotifications, resetNotifications } = userSlice.actions;
+export const {
+  addNotifications,
+  resetNotifications,
+  clearUserData,
+} = userSlice.actions;
 
 // export const selectCurrentUser = (state: RootState) => state.auth.user;
