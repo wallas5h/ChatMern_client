@@ -1,20 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { io } from "socket.io-client";
 import { apiSocketUrl } from "../config/api";
-import { User } from "../dto/user";
+import { MessageDto } from "../dto/message.dto";
+import { PrivateUser } from "../dto/user";
 
 export const socket = io(apiSocketUrl);
 
-export interface UserState {
-  user?: User;
+interface MessagesInterface {
+  _id: string;
+  messagesByDate: MessageDto[];
 }
 
-const initialState = {
+interface AppState {
+  rooms: string[];
+  currentRoom: string;
+  members: PrivateUser[];
+  messages: MessagesInterface[] | [];
+  privateMemberMsg: PrivateUser | null;
+  newMessages: {};
+}
+
+const initialState: AppState = {
   rooms: [],
-  currentRoom: "",
+  currentRoom: "general",
   members: [],
   messages: [],
-  privateMemberMsg: {},
+  privateMemberMsg: null,
   newMessages: {},
 };
 
