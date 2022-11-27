@@ -14,5 +14,11 @@ export interface User {
   email: string;
   image: string;
   name: string;
-  // isCoinbaseAuthorized: boolean;
+}
+export interface PrivateUser {
+  _id: string | null;
+  email: string;
+  image: string;
+  name: string;
+  status: string;
 }
