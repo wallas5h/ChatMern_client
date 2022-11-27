@@ -2,11 +2,21 @@ import { createSlice } from "@reduxjs/toolkit";
 import { User } from "../dto/user";
 import { usersApi } from "../services/usersApi";
 
-const initialState: User = {
+interface Dictionary<Value> {
+  [param: string]: Value;
+}
+
+interface StateInterface extends User {
+  newMessages: Dictionary<number>;
+  // newMessages: any{}[] | [];
+}
+
+const initialState: StateInterface = {
   id: null,
   email: "",
   image: "",
   name: "",
+  newMessages: {},
 };
 
 export const userSlice = createSlice({
@@ -14,14 +24,14 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     addNotifications: (state, { payload }) => {
-      //   if (state.newMessages[payload]) {
-      //     state.newMessages[payload] = state.newMessages[payload] + 1;
-      // } else {
-      //     state.newMessages[payload] = 1;
-      // }
+      if (state.newMessages[payload]) {
+        state.newMessages[payload] = state.newMessages[payload] + 1;
+      } else {
+        state.newMessages[payload] = 1;
+      }
     },
     resetNotifications: (state, { payload }) => {
-      // delete state.newMessages[payload];
+      delete state.newMessages[payload];
     },
     clearUserData: () => initialState,
   },
