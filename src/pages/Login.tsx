@@ -105,7 +105,7 @@ export const Login = () => {
         <p className="py-2 text-slate-600">
           Don't have an account ?{" "}
           <a href="/signup" className="text-green-500">
-            create one
+            Sign up!
           </a>
         </p>
       </form>

@@ -79,7 +79,7 @@ export default function Signup() {
 
     if (!image) return alert("Please upload your picture");
     const imageUploadUrl = await uploadImage(image);
-    console.log(imageUploadUrl);
+    // console.log(imageUploadUrl);
 
     if (password !== confirm_password) return alert("Passwords not match");
 
@@ -176,12 +176,12 @@ export default function Signup() {
           type="submit"
           className="p-2 w-full bg-green-600 text-white rounded hover:bg-green-500 cursor-pointer"
         >
-          Submit
+          {uploadingImg ? "Signing you up..." : "Signup"}
         </button>
         <p className="py-2 pt-4 text-slate-600">
           Already have an account?{" "}
           <a href="/login" className="text-green-500">
-            {uploadingImg ? "Signing you up..." : "Signup"}
+            Login
           </a>
         </p>
       </form>
